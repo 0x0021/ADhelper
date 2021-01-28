@@ -10,9 +10,8 @@ if __name__ == "__main__":
     access_token = gettoken(appkey,appsecret)
     user_id = getuserid(permissioncode,access_token)
     dept_id = getuserinfo(user_id,access_token)['dept_id']
-    account = getuserinfo(user_id,access_token)['email'].split('@')[0]
+    account = getuserinfo(user_id,access_token)['ad_account']
     password = 'mkgz18//'
-    #account = 'raimouse.che'
     #password = sys.argv[2]
     
     #操作类型标志

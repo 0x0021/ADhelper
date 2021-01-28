@@ -36,15 +36,17 @@ def getuserid(permissioncode,access_token):
         print(e)
         print("false")
         
-#获取部门id以及邮箱
+#获取员工信息
 def getuserinfo(user_id,access_token):
     req=dingtalk.api.OapiV2UserGetRequest("https://oapi.dingtalk.com/topapi/v2/user/get")
     req.userid=user_id
     try:
-        dept_id=req.getResponse(access_token)["result"]["dept_id_list"][0]
         #员工可能同时属于多个部门,但只能取其中一个id
-        email = req.getResponse(access_token)["result"]["email"]
-        return {'dept_id':dept_id,'email':email }
+        dept_id=req.getResponse(access_token)["result"]["dept_id_list"][0]
+        #email = req.getResponse(access_token)["result"]["email"]
+        #分割获取账号信息
+        ad_account = req.getResponse(access_token)["result"]["extension"].split('"')[3]
+        return { 'dept_id':dept_id, 'ad_account':ad_account }
     except Exception as e:
         print(e)
         print("false")
