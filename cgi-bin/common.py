@@ -1,3 +1,4 @@
+# coding=utf-8
 import sys
 sys.path.append(".\\dingtalk")
 import dingtalk.api
@@ -22,7 +23,7 @@ def gettoken(appkey,appsecret):
         access_token= req.getResponse()['access_token']
         return access_token
     except Exception as e:
-        print(e)
+        print('get access_token error:',e)
         print("false")
         
 #获取用户id
@@ -33,7 +34,7 @@ def getuserid(permissioncode,access_token):
         user_id= req.getResponse(access_token)["userid"]
         return user_id
     except Exception as e:
-        print(e)
+        print('get userid error:',e)
         print("false")
         
 #获取员工信息
@@ -43,41 +44,52 @@ def getuserinfo(user_id,access_token):
     try:
         #员工可能同时属于多个部门,但只能取其中一个id
         dept_id=req.getResponse(access_token)["result"]["dept_id_list"][0]
-        #email = req.getResponse(access_token)["result"]["email"]
-        #分割获取账号信息
-        ad_account = req.getResponse(access_token)["result"]["extension"].split('"')[3]
-        return { 'dept_id':dept_id, 'ad_account':ad_account }
+        #禁止员工自行更改的情况下可用邮箱来获取账号
+        #email = req.getResponse(access_token)["result"]["email"].split('@')[0]
+        #获取账号信息,如果用户没有填写扩展字段,则扩展字段值返回"{}"
+        if (req.getResponse(access_token)["result"]["extension"] == "{}" ):
+          ad_account = ''
+          return { 'dept_id':dept_id, 'ad_account':ad_account }
+        else :
+          ad_account = req.getResponse(access_token)["result"]["extension"].split('"')[3]
+          return { 'dept_id':dept_id, 'ad_account':ad_account }
     except Exception as e:
-        print(e)
+        print('get userinfo error:',e)
         print("false")
         
 #生成审批流
-def process_create(agent_id,process_code,user_id,dept_id,access_token,flag):
+def process_create(process_code,user_id,dept_id,access_token,flag,ad_account):
     req=dingtalk.api.OapiProcessinstanceCreateRequest("https://oapi.dingtalk.com/topapi/processinstance/create")
-    req.agent_id=agent_id
+    #req.agent_id=agent_id
     req.process_code=process_code
     req.originator_user_id=user_id
     req.dept_id=dept_id
     #根据操作类型构建审批内容,默认为解锁
     if (flag == 'resetpassowrd'):
         req.form_component_values=[
-                {
-                "name":"请选择需要的业务",
+            {
+                "name":"所需业务",
                 "value":"重置密码"
             },
-                {
-                "name":"重置密码",
-                "value":"mkgz18//"
+            {
+                "name":"AD账号",
+                "value":ad_account
             }
         ]
     else :
-        req.form_component_values={
-                "name":"请选择需要的业务",
+        req.form_component_values=[
+            {
+                "name":"所需业务",
                 "value":"解锁账号"
-	         }
+	        },
+            {
+                "name":"AD账号",
+                "value":ad_account
+            }
+        ]
     try:
         instanceid= req.getResponse(access_token)["process_instance_id"]
         #return(instanceid)
     except Exception as e:
-        print(e)
+        print('create process error:',e)
         print("false")

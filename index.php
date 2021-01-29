@@ -34,14 +34,16 @@ dd.ready(function() {
 <fieldset class="layui-elem-field site-demo-button">
   <br>
   <div class="div">
-    <button type="button" class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius" data-type="unlockaccount">解锁账号</button>
+    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius" data-type="unlockaccount">解锁账号</button>
   </div>
   <div class="div">
-    <button type="button" class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius" data-type="resetpassword"">重置密码</button>
+    <button type="button" class="layui-btn layui-btn-lg layui-btn-radius" data-type="resetpassword"">重置密码</button>
   </div>
 <div id='hide' style = "display : none " class="layui-progress layui-progress-big" lay-filter="loading" lay-showPercent="true">
   <div class="layui-progress-bar" lay-percent="0%"></div>
 </div>
+
+<div id="myDiv"></div>
 
 <script>
 layui.use('element', function(){
@@ -148,5 +150,5 @@ layui.use('element', function(){
 });
 </script>
 
-<div id="myDiv"></div>
+
 
