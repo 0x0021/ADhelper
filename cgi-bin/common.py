@@ -1,6 +1,7 @@
 # coding=utf-8
 import sys
-sys.path.append(".\\dingtalk")
+sys.path.append('E:\\phpstudy\\WWW\\ADhelper\\cgi-bin\\dingtalk')
+#print(sys.path)
 import dingtalk.api
 import winrm
 import time

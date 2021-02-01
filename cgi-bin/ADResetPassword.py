@@ -8,10 +8,18 @@ permissioncode=sys.argv[1]
 if __name__ == "__main__":
 
     #构建用户相关信息
-    access_token = gettoken(appkey,appsecret)
-    user_id = getuserid(permissioncode,access_token)
-    dept_id = getuserinfo(user_id,access_token)['dept_id']
-    account = getuserinfo(user_id,access_token)['ad_account']
+    if (permissioncode == 'login'):
+        #print(permissioncode)
+        access_token = gettoken(appkey,appsecret)
+        user_id = sys.argv[2]
+        dept_id = sys.argv[3]
+        account = sys.argv[4]
+    else :
+        access_token = gettoken(appkey,appsecret)
+        user_id = getuserid(permissioncode,access_token)
+        dept_id = getuserinfo(user_id,access_token)['dept_id']
+        account = getuserinfo(user_id,access_token)['ad_account']
+        
     password = 'mkgz18//'
     #password = sys.argv[2]
     
@@ -33,8 +41,8 @@ if __name__ == "__main__":
                 s.run_ps(log)
                 process_create(process_code,user_id,dept_id,access_token,flag,account)
                 #输出用户信息
-                #print(user_id)
-                #print(dept_id)
+                print(user_id)
+                print(dept_id)
                 #print('true')
             else :
             #只生成日志

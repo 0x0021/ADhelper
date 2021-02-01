@@ -8,10 +8,17 @@ permissioncode=sys.argv[1]
 if __name__ == "__main__":
 
     #获取相关信息
-    access_token = gettoken(appkey,appsecret)
-    user_id = getuserid(permissioncode,access_token)
-    dept_id = getuserinfo(user_id,access_token)['dept_id']
-    account = getuserinfo(user_id,access_token)['ad_account']
+    if (permissioncode == 'login'):
+        #print(permissioncode)
+        access_token = gettoken(appkey,appsecret)
+        user_id = sys.argv[2]
+        dept_id = sys.argv[3]
+        account = sys.argv[4]
+    else :
+        access_token = gettoken(appkey,appsecret)
+        user_id = getuserid(permissioncode,access_token)
+        dept_id = getuserinfo(user_id,access_token)['dept_id']
+        account = getuserinfo(user_id,access_token)['ad_account']
     
     if (account != ''):
         #操作类型标志
@@ -30,7 +37,9 @@ if __name__ == "__main__":
                  log = '"{0} {1} 账号解锁成功" | Out-File -Append C:\\it\\ADunlocklog.txt'.format(unlocktime,account)
                  s.run_ps(log)
                  process_create(process_code,user_id,dept_id,access_token,flag,account)
-                 #print('true')
+                 print(user_id)
+                 print(dept_id)
+                 print(account)
             else :
                  result=r.std_err.decode().splitlines()[0]
                  log = '"{0} 账号解锁失败,{1}" | Out-File -Append C:\\it\\ADunlocklog.txt'.format(unlocktime,result)
